@@ -10,3 +10,4 @@ env/
 **/*.aiff
 **/*.aif
 **/*.txt
+requirements_installed.txt
