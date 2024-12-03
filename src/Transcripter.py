@@ -2,6 +2,8 @@ import os
 import whisper
 
 class Transcripter:
+    supported_model = ["base", "small", "medium", "large"]
+
     def __init__(
         self,
         file_path,
@@ -20,6 +22,8 @@ class Transcripter:
         self.model = None
 
     def loadModel(self):
+        if self.model_size not in self.supported_model:
+            raise Exception(f"Le modèle {self.model_size} n'est pas supporté.")
         self.model = whisper.load_model(self.model_size)  # Remplacez "base" par d'autres modèles si besoin (ex: "small", "medium", "large")
 
     def audioToSegment(self):
@@ -44,6 +48,7 @@ class Transcripter:
                     start_time = segment["start"]
                     end_time = segment["end"]
                     text = segment["text"]
+                    text_file.write(f"{start_time:.2f} - {end_time:.2f}: {text}\n")
                 elif self.with_speaker:
                     speaker = segment.get("speaker", "Interlocuteur inconnu")  # Nom d'interlocuteur (ou par défaut "Interlocuteur")
                     text = segment["text"]

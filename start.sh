@@ -31,4 +31,60 @@ else
     exit 1
 fi
 
-python3 main.py
+# Vérification des arguments
+if [ "$#" -lt 3 ]; then
+    echo "Usage: ./start.sh <file_path> <output_file> <model> [--with-time] [--with-speaker] [--remove-original-file]"
+    exit 1
+fi
+
+file_path=$1
+output_file=$2
+model=$3
+shift 3
+
+# Vérification de l'existence du fichier
+if [ ! -f "$file_path" ]; then
+    echo "Le fichier $file_path n'existe pas."
+    exit 1
+fi
+
+# Vérification des options supplémentaires
+with_time=false
+with_speaker=false
+remove_original_file=false
+
+for arg in "$@"; do
+    case $arg in
+        --with-time)
+            with_time=true
+            ;;
+        --with-speaker)
+            with_speaker=true
+            ;;
+        --remove-original-file)
+            remove_original_file=true
+            ;;
+    esac
+done
+
+# Construction de la commande Python avec les options
+cmd="python3 main.py \"$file_path\" \"$output_file\" \"$model\""
+
+if $with_time && $with_speaker && $remove_original_file; then
+    cmd="$cmd --with-time --with-speaker --remove-original-file"
+elif $with_time && $with_speaker; then
+    cmd="$cmd --with-time --with-speaker"
+elif $with_time && $remove_original_file; then
+    cmd="$cmd -with-time --remove-original-file"
+elif $with_speaker && $remove_original_file; then
+    cmd="$cmd --with-speaker --remove-original-file"
+elif $with_time; then
+    cmd="$cmd --with-time"
+elif $with_speaker; then
+    cmd="$cmd --with-speaker"
+elif $remove_original_file; then
+    cmd="$cmd --remove-original-file"
+fi
+
+# Exécution de la commande
+eval $cmd
