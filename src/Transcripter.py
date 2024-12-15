@@ -2,7 +2,7 @@ import os
 import whisper
 
 class Transcripter:
-    supported_model = ["base", "small", "medium", "large"]
+    supported_model = ["tiny", "base", "small", "medium", "large", "turbo"]
 
     def __init__(
         self,
