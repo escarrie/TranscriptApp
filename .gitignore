@@ -11,3 +11,5 @@ env/
 **/*.aif
 **/*.txt
 requirements_installed.txt
+dist/
+build/

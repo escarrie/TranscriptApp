@@ -38,12 +38,9 @@ if __name__ == "__main__":
     elif args[1] == "--list-models":
         print("Supported models: base, small, medium, large")
         sys.exit(0)
-    elif args[1] == "--interface" or args[1] == "-i":
+    elif args[1] == "--interface" or args[1] == "-i" or len(args) < 4:
         interface = Interface()
         interface.run()
-    elif len(args) < 4:
-        print("Usage: python main.py <audio_file> <output_file> <model>")
-        sys.exit(1)
     elif not os.path.exists(args[1]):
         print(f"Le fichier {args[1]} n'existe pas.")
         sys.exit(1)
