@@ -51,12 +51,15 @@ if (-not (Test-Path $file_path)) {
 $with_time = $false
 $with_speaker = $false
 $remove_original_file = $false
+$interface = $false
 
 foreach ($arg in $args) {
     switch ($arg) {
         "--with-time" { $with_time = $true }
         "--with-speaker" { $with_speaker = $true }
         "--remove-original-file" { $remove_original_file = $true }
+        "--interface" { $interface = $true }
+        default { $interface = $true }
     }
 }
 
