@@ -11,7 +11,8 @@ class Transcripter:
         model_size="base",
         with_speaker = False,
         with_time = False,
-        remove_original = False
+        remove_original = False,
+        language = "fr"
     ):
         self.file_path = file_path
         self.output_path = output_path
@@ -20,6 +21,7 @@ class Transcripter:
         self.with_time = with_time
         self.remove_original = remove_original
         self.model = None
+        self.language = language
 
     def loadModel(self):
         if self.model_size not in self.supported_model:
@@ -29,7 +31,7 @@ class Transcripter:
     def audioToSegment(self):
         filename = os.path.basename(self.file_path)
         # Transcription avec Whisper
-        result = self.model.transcribe(self.file_path, language="fr", fp16=False)
+        result = self.model.transcribe(self.file_path, language=self.language, fp16=False)
         # Supprimer le fichier audio une fois transcri
         if os.path.exists(self.file_path) and self.remove_original:
             os.remove(self.file_path)

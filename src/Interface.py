@@ -4,6 +4,7 @@ from tkinter import ttk, filedialog
 from src.Config import Config
 from src.AudioConverter import AudioConverter
 from src.Transcripter import Transcripter
+import os
 
 class Interface:
     def __init__(self):
@@ -21,6 +22,22 @@ class Interface:
         self.text_frame.grid(row=0, column=0, padx=10, pady=10, sticky="nsew")
         self.label_text = tk.Label(self.text_frame, text="DERNIER TEXT TRANSCRIT")
         self.label_text.pack(fill="both", expand=True)
+        self.transcribed_text_var = tk.StringVar()
+        self.transcribed_text_label = tk.Entry(self.text_frame, textvariable=self.transcribed_text_var, state="readonly")
+        self.transcribed_text_label.pack(fill="both", expand=True)
+
+        # Vérifier si le fichier transcript.txt existe
+        transcript_path = "transcript.txt"
+        if os.path.exists(transcript_path):
+            with open(transcript_path, "r", encoding="utf-8") as file:
+                transcribed_text = file.read()
+                self.transcribed_text_var.set(transcribed_text)
+
+        # Make the Entry widget handle multiline text
+        self.transcribed_text_label = tk.Text(self.text_frame, wrap="word", height=10, width=50, padx=5, pady=5)
+        self.transcribed_text_label.insert("1.0", self.transcribed_text_var.get())
+        self.transcribed_text_label.config(state="disabled")
+        self.transcribed_text_label.pack(fill="both", expand=True)
 
         # Options de sélection
         self.transcript_frame = tk.Frame(self.window, borderwidth=2, relief="groove")
@@ -70,7 +87,6 @@ class Interface:
         # Transcrire le fichier audio
         transcripter = Transcripter(audio_file, "transcript.txt", model_size=model, with_time=with_time, with_speaker=with_speaker)
         output_path = transcripter.transcript()
-        print(output_path)
 
     def page_config(self):
         if hasattr(self, 'transcript_frame') and self.transcript_frame:
