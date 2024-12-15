@@ -87,6 +87,17 @@ class Interface:
         # Transcrire le fichier audio
         transcripter = Transcripter(audio_file, "transcript.txt", model_size=model, with_time=with_time, with_speaker=with_speaker)
         output_path = transcripter.transcript()
+        transcript_path = "transcript.txt"
+        if os.path.exists(transcript_path):
+            with open(transcript_path, "r", encoding="utf-8") as file:
+                transcribed_text = file.read()
+                self.transcribed_text_var.set(transcribed_text)
+
+        # Make the Entry widget handle multiline text
+        self.transcribed_text_label.config(state="normal")
+        self.transcribed_text_label.delete("1.0", tk.END)
+        self.transcribed_text_label.insert("1.0", self.transcribed_text_var.get())
+        self.transcribed_text_label.config(state="disabled")
 
     def page_config(self):
         if hasattr(self, 'transcript_frame') and self.transcript_frame:
